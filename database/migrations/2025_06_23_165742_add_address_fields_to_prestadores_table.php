@@ -26,7 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('prestadores', function (Blueprint $table) {
-            // Ao reverter, remova as colunas na ordem inversa da criação
+            
             $table->dropColumn('UF');
             $table->dropColumn('cidade');
             $table->dropColumn('bairro');

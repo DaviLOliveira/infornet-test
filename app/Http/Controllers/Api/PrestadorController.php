@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Prestador;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log; // Importe a fachada Log
+use Illuminate\Support\Facades\Log; 
 
 class PrestadorController extends Controller
 {

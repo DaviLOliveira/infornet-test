@@ -33,6 +33,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     // Requisito: "Buscar prestadores"
     Route::post('/prestadores/buscar', [PrestadorController::class, 'buscar']);
 
-    // (Opcional) Endpoint de Logout
+    // Endpoint de Logout
     Route::post('/logout', [AuthController::class, 'logout']);
 });
