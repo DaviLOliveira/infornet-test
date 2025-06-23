@@ -8,7 +8,7 @@ return Application::configure(basePath: dirname(__DIR__))
     // Em bootstrap/app.php
     ->withRouting(
     web: __DIR__.'/../routes/web.php',
-    // api: __DIR__.'/../routes/api.php', // Linha comentada
+    api: __DIR__.'/../routes/api.php', // Linha comentada
     commands: __DIR__.'/../routes/console.php',
     health: '/up',
     )
