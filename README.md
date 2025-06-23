@@ -1,61 +1,174 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Teste de Vaga de Desenvolvedor - Infornet
+Este projeto implementa uma API REST para busca de prestadores de serviços veiculares 24 horas, com base nos requisitos especificados no desafio Infornet. A aplicação permite a autenticação de usuários, busca de prestadores por localização e serviço, aplicação de filtros e ordenação, e cálculo de valores de serviço com base na distância.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Tecnologias Utilizadas
+Framework: Laravel 11
 
-## About Laravel
+Linguagem: PHP 8.x
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Banco de Dados: MySQL 8.x
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Containerização: Docker com Laravel Sail
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Frontend: HTML, JavaScript (AJAX), Tailwind CSS (via CDN)
 
-## Learning Laravel
+Autenticação: JWT (JSON Web Tokens)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Pré-requisitos
+Para executar este projeto, você precisará ter instalado em sua máquina:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Docker Desktop: (Windows/macOS) ou Docker Engine e Docker Compose: (Linux)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Verifique a instalação: docker --version e docker compose version
 
-## Laravel Sponsors
+WSL 2 (Windows Subsystem for Linux): (Apenas para usuários Windows, recomendado para rodar o Sail)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Instalação e Execução do Projeto
+Siga os passos abaixo para configurar e rodar o projeto localmente:
 
-### Premium Partners
+Clone o Repositório:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+git clone https://github.com/DaviLOliveira/infornet-test.git
+cd infornet-test
 
-## Contributing
+Instale as Dependências do Composer com Sail:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php83-composer:latest \
+    composer install --ignore-platform-reqs
 
-## Code of Conduct
+Este comando usa uma imagem Docker para instalar as dependências PHP via Composer, garantindo que o ambiente de execução seja consistente.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Copie o Arquivo de Ambiente:
 
-## Security Vulnerabilities
+cp .env.example .env
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Gere a Chave da Aplicação:
 
-## License
+./vendor/bin/sail artisan key:generate
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Suba os Contêineres Docker:
+
+./vendor/bin/sail up -d
+
+Isso iniciará os serviços Docker em segundo plano (PHP, MySQL, etc.).
+
+Execute as Migrações e Popule o Banco de Dados (Seeders):
+
+./vendor/bin/sail artisan migrate:fresh --seed
+
+Este comando irá recriar todas as tabelas no seu banco de dados e populará com os dados de teste definidos nos seeders (usuários, serviços, prestadores com dados de endereço e serviços anexados).
+
+Acesse a Aplicação no Navegador:
+
+Frontend (Tela de Consulta): Abra seu navegador e acesse http://localhost.
+
+API: A API estará disponível em http://localhost/api/....
+
+Autenticação (JWT)
+As rotas da API estão protegidas por autenticação JWT. Para obter um token de acesso:
+
+Utilize o Postman (ou similar):
+
+Endpoint: POST http://localhost/api/login
+
+Headers: Content-Type: application/json
+
+Body (JSON):
+
+{
+    "email": "teste@email.com",
+    "password": "password"
+}
+
+O teste@email.com e password são criados pelo UserSeeder. Você pode ajustar o UserSeeder se quiser outros credenciais.
+
+Copie o Token: A resposta conterá um token JWT (na propriedade token). Copie este token.
+
+Cole no Frontend: No arquivo resources/views/consulta.blade.php, substitua 'COLE_SEU_TOKEN_JWT_AQUI' pelo token copiado.
+
+const bearerToken = 'SEU_TOKEN_JWT_AQUI';
+
+Em uma aplicação real, o token seria gerenciado dinamicamente após o login do usuário.
+
+Documentação Postman com as Chamadas de API
+Uma coleção Postman pode ser exportada do Postman e anexada separadamente ao projeto para detalhar todas as chamadas de API. No entanto, aqui estão os principais endpoints para referência:
+
+Autenticação:
+
+POST /api/login
+
+Body: {"email": "...", "password": "..."}
+
+Response: {"user": {...}, "token": "..."}
+
+Busca de Serviços Disponíveis:
+
+GET /api/servicos
+
+Headers: Authorization: Bearer <SEU_TOKEN>
+
+Response: [{"id": 1, "nome": "Reboque", ...}]
+
+Buscar Prestadores:
+
+POST /api/prestadores/buscar
+
+Headers: Content-Type: application/json, Authorization: Bearer <SEU_TOKEN>
+
+Body (Exemplo):
+
+{
+    "latitude_origem": -19.9190,
+    "longitude_origem": -43.9386,
+    "latitude_destino": -19.8653,
+    "longitude_destino": -43.9624,
+    "servico_id": 1,
+    "quantidade": 10,
+    "ordenacao": {
+        "valor_total": "asc"
+    },
+    "filtros": {
+        "cidade": "Belo Horizonte",
+        "estado": "MG"
+    }
+}
+
+Response: [{ "id": ..., "nome": ..., "distancia_total": ..., "valor_total_servico": ..., "status_online": "..." }, ...]
+
+API Externa para Status Online (Consumida pelo Backend):
+
+POST https://nhen90f0j3.execute-api.us-east-1.amazonaws.com/v1/api/prestadores/online
+
+Autenticação: Basic Auth (usuario: teste-Infornet, senha: c@nsulta-dados-ap1-teste-Infornet#24)
+
+Body: {"prestadores": [1, 2, 3]}
+
+Response: {"data": [{"id": 1, "status": "online"}, {"id": 2, "status": "offline"}]}
+
+Esta API é chamada internamente pelo endpoint /api/prestadores/buscar.
+
+Diferenciais (Itens Opcionais)
+Este projeto implementou alguns dos diferenciais propostos:
+
+Disponibilização do projeto em contêiner Docker: O projeto é configurado e executado através do Docker com Laravel Sail, facilitando a portabilidade e consistência do ambiente de desenvolvimento/produção. As instruções de execução detalham o uso do Sail para iniciar os contêineres.
+
+Documentação Postman com as chamadas de API: As principais chamadas de API foram listadas e detalhadas acima para referência rápida. Uma coleção Postman completa pode ser exportada e incluída no repositório.
+
+Itens Opcionais a serem Detalhados (Não Implementados no Prazo)
+Implementação de testes unitários e de integração: Não foram desenvolvidos testes automatizados para as funcionalidades da API e da lógica de negócio. Esta seria a próxima etapa crucial para garantir a robustez e a manutenibilidade do código.
+
+Detalhar execução dos testes: Como os testes não foram implementados, não há execução para detalhar.
+
+Detalhar o processo para execução do contêiner: Já abordado nas seções de "Pré-requisitos" e "Instalação e Execução".
+
+Observações Adicionais
+Os seeders atuais populam 10 prestadores com múltiplos serviços, mas podem ser expandidos para cumprir o mínimo de 25 prestadores e garantir 3 serviços para cada um de forma mais robusta.
+
+A interface de busca no frontend aceita coordenadas diretamente. Uma melhoria futura seria integrar a API externa de geocodificação para permitir que o usuário insira um endereço em vez de lat/lng.
+
+Contato
+Para dúvidas ou informações adicionais, entre em contato.
